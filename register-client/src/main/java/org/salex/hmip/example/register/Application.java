@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Profile;
  * Spring Boot command line app to register a new client.
  */
 @SpringBootApplication
-@Profile("register")
 public class Application implements CommandLineRunner {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 

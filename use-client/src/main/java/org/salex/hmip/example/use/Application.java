@@ -18,7 +18,6 @@ import java.util.Map;
  * Spring Boot command line app to use an already registered client.
  */
 @SpringBootApplication
-@Profile("client")
 @ConfigurationPropertiesScan(basePackageClasses = HmIPProperties.class)
 public class Application implements CommandLineRunner {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
