@@ -4,5 +4,5 @@ This repository contains different examples using the [Java Client for the Homem
 
 | Application                        | Description                                                                        |
 |------------------------------------|------------------------------------------------------------------------------------|
-| [register-client](register-client) | A Spring Boot Console App to register a new client in the Homematic IP Cloud. |
-| [use-client](use-client)           | A Spring Boot Console App requesting some information from the Homemativ IP Cloud. |
+| [register-client](register-client) | A Spring Boot Console App to register a new client in the Homematic IP Cloud.      |
+| [use-client](use-client)           | A Spring Boot Console App requesting some information from the Homematic IP Cloud. |
