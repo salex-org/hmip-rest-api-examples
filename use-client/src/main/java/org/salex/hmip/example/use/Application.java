@@ -2,6 +2,7 @@ package org.salex.hmip.example.use;
 
 import org.salex.hmip.client.HmIPClient;
 import org.salex.hmip.client.HmIPProperties;
+import org.salex.hmip.client.HmIPState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Profile;
+import reactor.core.publisher.Flux;
 
 import java.util.Map;
 
@@ -34,27 +36,23 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        client.loadCurrentState()
+        client.getDevice("3014F711A00010DD899E53A0")
                 .doOnError(error -> {
                     LOG.error(String.format("Failed to load the current state: %s", error.getMessage()), error);
                     SpringApplication.exit(context);
                     System.exit(1);
                 })
-                .subscribe(currentState -> {
-                    LOG.info("Successfully loaded the current state");
-                    LOG.info("Clients:");
-                    for (var client:currentState.getClients().values()) {
-                        LOG.info(String.format("\t%s (%s)", client.getName(), client.getId()));
-                    }
-                    LOG.info("Device:");
-                    for (var device:currentState.getDevices().values()) {
-                        LOG.info(String.format("\t%s (%s), Type: %s, Model: %s", device.getName(), device.getId(), device.getType(), device.getModel()));
-                        if("TEMPERATURE_HUMIDITY_SENSOR_OUTDOOR".equals(device.getType())) {
-                            var temperature = Double.valueOf(((Map<String, Object>)device.getChannels().get("1")).get("actualTemperature").toString());
-                            var humidity = Integer.valueOf(((Map<String, Object>)device.getChannels().get("1")).get("humidity").toString());
-                            LOG.info(String.format("\t\tMeasurement from %s: %.1f°C and %d%% humidity", device.getStatusTimestamp(), temperature, humidity));
-                        }
-                    }
+                .map(device -> {
+                    LOG.info("Successfully loaded current state of the climate sensor");
+                    LOG.info(String.format("Measurement from %s", device.getStatusTimestamp()));
+                    return device.getChannels().values();
+                })
+                .flatMapMany(Flux::fromIterable)
+                .filter(channel -> channel instanceof HmIPState.ClimateSensorChannel)
+                .next()
+                .cast(HmIPState.ClimateSensorChannel.class)
+                .subscribe(channel -> {
+                    LOG.info(String.format("%.1f°C and %d%% humidity", channel.getTemperature(), channel.getHumidity()));
                     System.exit(SpringApplication.exit(context));
                 });
     }
