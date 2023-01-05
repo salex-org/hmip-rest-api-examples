@@ -1,6 +1,6 @@
 # Examples using the Java Client for the Homematic IP Cloud
 
-This repository contains different examples using the [Java Client for the Homematic IP Cloud](https://github.com/sagaert/hmip-rest-api).
+This repository contains different examples using the [Java Client for the Homematic IP Cloud](https://github.com/salex-org/hmip-rest-api).
 
 | Application                        | Description                                                                        |
 |------------------------------------|------------------------------------------------------------------------------------|
