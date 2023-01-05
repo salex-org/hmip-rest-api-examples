@@ -14,7 +14,7 @@
         <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
         <spring.boot.version>2.6.4</spring.boot.version>
         <spring.cloud.version>2021.0.0</spring.cloud.version>
-        <hmip.client.version>1.1.0</hmip.client.version>
+        <hmip.client.version>1.0.0</hmip.client.version>
     </properties>
 
     <repositories>
